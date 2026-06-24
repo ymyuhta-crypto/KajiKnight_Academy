@@ -3,13 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ゲームスコア計算ツール</title>
+    <title>カジナイトアカデミー 鍛冶スコア計算ツール</title>
     <style>
         :root {
-            --bg-color: #f4f7f6;
-            --card-bg: #ffffff;
+            --bg-color: #1a1a24;
+            --card-bg: #262636;
             --primary-color: #3498db;
-            --text-color: #2c3e50;
+            --text-color: #f0f0f5;
+            --border-color: #3a3a52;
+            
+            /* アイテム色の定義 */
+            --color-red: #ff4d4d;
+            --color-blue: #3399ff;
+            --color-yellow: #ffcc00;
+            --color-green: #2ecc71;
+            --color-gold: #f1c40f;
         }
         body {
             font-family: 'Helvetica Neue', Arial, sans-serif;
@@ -18,7 +26,8 @@
             margin: 0;
             padding: 20px;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            align-items: center;
         }
         .container {
             width: 100%;
@@ -26,39 +35,45 @@
             background: var(--card-bg);
             padding: 25px;
             border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            border: 1px solid var(--border-color);
         }
         h1 {
             text-align: center;
-            font-size: 24px;
+            font-size: 22px;
             margin-bottom: 25px;
-            color: #2c3e50;
+            color: #fff;
+            border-bottom: 2px solid #e74c3c;
+            padding-bottom: 10px;
         }
         .level-select {
             margin-bottom: 25px;
             padding: 15px;
-            background: #eef2f5;
+            background: #1f1f2e;
             border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            border: 1px solid var(--border-color);
         }
         .level-select select {
             padding: 8px 12px;
             font-size: 16px;
             border-radius: 6px;
-            border: 1px solid #ccc;
+            border: 1px solid var(--border-color);
+            background: #2c2c3e;
+            color: #fff;
         }
         .slot-card {
-            border: 2px solid #e2e8f0;
+            border: 1px solid var(--border-color);
             border-radius: 8px;
             padding: 15px;
             margin-bottom: 15px;
-            background: #fff;
+            background: #1f1f2e;
         }
         .slot-title {
             font-weight: bold;
-            font-size: 18px;
+            font-size: 17px;
             margin-bottom: 10px;
             display: flex;
             justify-content: space-between;
@@ -76,8 +91,27 @@
             padding: 10px;
             font-size: 15px;
             border-radius: 6px;
-            border: 1px solid #cbd5e1;
+            border: 1px solid var(--border-color);
+            background: #2c2c3e;
+            color: #fff;
+            font-weight: bold;
+            transition: background-color 0.2s, color 0.2s;
         }
+        
+        /* セレクトボックスの色分け（JavaScriptでも動的に制御） */
+        select.color-red { background-color: var(--color-red) !important; color: #fff !important; }
+        select.color-blue { background-color: var(--color-blue) !important; color: #fff !important; }
+        select.color-yellow { background-color: #b38f00 !important; color: #fff !important; } /* 視認性のため少し暗めに */
+        select.color-green { background-color: var(--color-green) !important; color: #fff !important; }
+        select.color-gold { background-color: var(--color-gold) !important; color: #000 !important; }
+
+        /* プルダウンの選択肢内の色 */
+        option[value="red"] { background-color: #ff4d4d; color: #fff; }
+        option[value="blue"] { background-color: #3399ff; color: #fff; }
+        option[value="yellow"] { background-color: #ffcc00; color: #000; }
+        option[value="green"] { background-color: #2ecc71; color: #fff; }
+        option[value="gold"] { background-color: #f1c40f; color: #000; }
+
         .checkbox-container {
             display: flex;
             align-items: center;
@@ -87,28 +121,63 @@
         .result-box {
             margin-top: 25px;
             padding: 20px;
-            background: #2c3e50;
+            background: #11111a;
             color: #fff;
             border-radius: 8px;
             text-align: center;
+            border: 1px solid var(--border-color);
         }
         .total-score {
-            font-size: 36px;
+            font-size: 42px;
             font-weight: bold;
             color: #2ecc71;
             margin: 10px 0;
+            text-shadow: 0 0 10px rgba(46, 204, 113, 0.3);
         }
         .details {
             font-size: 14px;
-            color: #bdc3c7;
+            color: #a0a0b0;
             line-height: 1.6;
+        }
+        
+        /* リンクエリア */
+        .footer-links {
+            width: 100%;
+            max-width: 600px;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            font-size: 13px;
+            line-height: 1.8;
+        }
+        .footer-links p {
+            margin: 8px 0;
+        }
+        .footer-links a {
+            color: #3498db;
+            text-decoration: none;
+            word-break: break-all;
+        }
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+        .support-link {
+            background: #2c3e50;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 15px !important;
+            border-left: 4px solid #e74c3c;
+        }
+        .support-link a {
+            color: #ff7675;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>ゲームスコア計算ツール</h1>
+    <h1>カジナイトアカデミー<br>鍛冶スコア計算ツール</h1>
 
     <div class="level-select">
         <label for="gameLevel"><strong>ゲームレベル:</strong></label>
@@ -122,13 +191,13 @@
 
     <div class="slot-card">
         <div class="slot-title">
-            <span>スロット 1 (常時2倍※カカシ除)</span>
+            <span>スロット 1</span>
             <label class="checkbox-container">
                 <input type="checkbox" id="complete1" checked onchange="calculate()"> 完成
             </label>
         </div>
         <div class="slot-inputs">
-            <select id="color1" onchange="calculate()">
+            <select id="color1" onchange="updateSelectColor(1); calculate();" class="color-red">
                 <option value="red">赤色</option>
                 <option value="blue">青色</option>
                 <option value="yellow">黄色</option>
@@ -136,11 +205,11 @@
                 <option value="gold">金色</option>
             </select>
             <select id="type1" onchange="calculate()">
-                <option value="kakashi">カカシ</option>
-                <option value="ring">指輪</option>
-                <option value="charm">チャーム</option>
-                <option value="bracelet">腕輪</option>
-                <option value="necklace">首飾り</option>
+                <option value="kakashi">🌾 カカシ</option>
+                <option value="ring">💍 指輪</option>
+                <option value="charm">🧿 チャーム</option>
+                <option value="bracelet"> 腕輪</option>
+                <option value="necklace">📿 首飾り</option>
             </select>
         </div>
     </div>
@@ -148,157 +217,3 @@
     <div class="slot-card">
         <div class="slot-title">
             <span>スロット 2</span>
-            <label class="checkbox-container">
-                <input type="checkbox" id="complete2" checked onchange="calculate()"> 完成
-            </label>
-        </div>
-        <div class="slot-inputs">
-            <select id="color2" onchange="calculate()">
-                <option value="red">赤色</option>
-                <option value="blue">青色</option>
-                <option value="yellow">黄色</option>
-                <option value="green">緑色</option>
-                <option value="gold">金色</option>
-            </select>
-            <select id="type2" onchange="calculate()">
-                <option value="kakashi">カカシ</option>
-                <option value="ring">指輪</option>
-                <option value="charm">チャーム</option>
-                <option value="bracelet">腕輪</option>
-                <option value="necklace">首飾り</option>
-            </select>
-        </div>
-    </div>
-
-    <div class="slot-card">
-        <div class="slot-title">
-            <span>スロット 3</span>
-            <label class="checkbox-container">
-                <input type="checkbox" id="complete3" checked onchange="calculate()"> 完成
-            </label>
-        </div>
-        <div class="slot-inputs">
-            <select id="color3" onchange="calculate()">
-                <option value="red">赤色</option>
-                <option value="blue">青色</option>
-                <option value="yellow">黄色</option>
-                <option value="green">緑色</option>
-                <option value="gold">金色</option>
-            </select>
-            <select id="type3" onchange="calculate()">
-                <option value="kakashi">カカシ</option>
-                <option value="ring">指輪</option>
-                <option value="charm">チャーム</option>
-                <option value="bracelet">腕輪</option>
-                <option value="necklace">首飾り</option>
-            </select>
-        </div>
-    </div>
-
-    <div class="result-box">
-        <div>最終獲得スコア</div>
-        <div class="total-score" id="totalScore">0</div>
-        <div class="details" id="scoreDetails">
-            ベース合計: 0点 | ボーナス: 0点<br>
-            各スロット最終値 ➔ 1: 0点 | 2: 0点 | 3: 0点
-        </div>
-    </div>
-</div>
-
-<script>
-function getBaseScore(type) {
-    const scores = { 'ring': 1, 'charm': 2, 'bracelet': 3, 'necklace': 5 };
-    return scores[type] || 0;
-}
-
-function calculate() {
-    const gameLevel = document.getElementById('gameLevel').value;
-    const nMap = { '初級': 1, '三級': 2, '二級': 3, '一級': 4 };
-    const n = nMap[gameLevel] || 0;
-
-    // 各スロットの状態取得
-    const slot1 = { color: document.getElementById('color1').value, type: document.getElementById('type1').value, isCompleted: document.getElementById('complete1').checked };
-    const slot2 = { color: document.getElementById('color2').value, type: document.getElementById('type2').value, isCompleted: document.getElementById('complete2').checked };
-    const slot3 = { color: document.getElementById('color3').value, type: document.getElementById('type3').value, isCompleted: document.getElementById('complete3').checked };
-
-    // ベーススコア算出（カカシは初期値0）
-    let s1 = slot1.color === 'gold' ? 10 : (slot1.type === 'kakashi' ? 0 : getBaseScore(slot1.type));
-    let s2 = slot2.color === 'gold' ? 10 : (slot2.type === 'kakashi' ? 0 : getBaseScore(slot2.type));
-    let s3 = slot3.color === 'gold' ? 10 : (slot3.type === 'kakashi' ? 0 : getBaseScore(slot3.type));
-
-    const k1 = slot1.type === 'kakashi' && slot1.color !== 'gold';
-    const k2 = slot2.type === 'kakashi' && slot2.color !== 'gold';
-    const k3 = slot3.type === 'kakashi' && slot3.color !== 'gold';
-
-    // 【訂正ルール】スロット1がカカシ以外なら最初に2倍
-    if (!k1) { s1 = s1 * 2; }
-
-    let final1 = 0, final2 = 0, final3 = 0;
-
-    // カカシの伝播処理
-    if (!k1 && !k2 && !k3) {
-        final1 = s1; final2 = s2; final3 = s3;
-    } else if (k1 && !k2 && !k3) { // ①
-        final2 = s2; final1 = final2; final3 = s3;
-    } else if (!k1 && k2 && !k3) { // ②
-        final1 = s1; final3 = s3; final2 = final1 + final3;
-    } else if (!k1 && !k2 && k3) { // ③
-        final1 = s1; final2 = s2; final3 = final2;
-    } else if (k1 && k2 && !k3) {  // ④
-        final3 = s3; final2 = final3; final1 = final2;
-    } else if (k1 && !k2 && k3) {  // ⑤
-        final2 = s2; final1 = final2; final3 = final2;
-    } else if (!k1 && k2 && k3) {  // ⑥
-        final1 = s1; final2 = final1; final3 = final2;
-    } else {
-        final1 = 0; final2 = 0; final3 = 0;
-    }
-
-    // 完成スロットの集計
-    let baseTotal = 0;
-    let completedItems = [];
-    if (slot1.isCompleted) { baseTotal += final1; completedItems.push(slot1); }
-    if (slot2.isCompleted) { baseTotal += final2; completedItems.push(slot2); }
-    if (slot3.isCompleted) { baseTotal += final3; completedItems.push(slot3); }
-
-    // ボーナス計算（重複なし）
-    let bonus = 0;
-    if (completedItems.length >= 2) {
-        if (completedItems.length === 3) {
-            const item1 = completedItems[0]; const item2 = completedItems[1]; const item3 = completedItems[2];
-            if (item1.color === item2.color && item2.color === item3.color && item1.type === item2.type && item2.type === item3.type) {
-                bonus += 2 * n;
-            } else if ((item1.color === item2.color && item1.type === item2.type) || (item2.color === item3.color && item2.type === item3.type) || (item1.color === item3.color && item1.type === item3.type)) {
-                bonus += 2 * n;
-            } else {
-                let colorMatch = (item1.color === item2.color || item2.color === item3.color || item1.color === item3.color);
-                let typeMatch = (item1.type === item2.type || item2.type === item3.type || item1.type === item3.type);
-                if (colorMatch) bonus += n;
-                if (typeMatch) bonus += n;
-            }
-        } else if (completedItems.length === 2) {
-            const item1 = completedItems[0]; const item2 = completedItems[1];
-            if (item1.color === item2.color && item1.type === item2.type) {
-                bonus += 2 * n;
-            } else if (item1.color === item2.color) {
-                bonus += n;
-            } else if (item1.type === item2.type) {
-                bonus += n;
-            }
-        }
-    }
-
-    // 画面への描画
-    document.getElementById('totalScore').innerText = baseTotal + bonus;
-    document.getElementById('scoreDetails').innerHTML = `
-        ベース合計: ${baseTotal}点 | ボーナス: ${bonus}点<br>
-        各スロット最終値 ➔ 1: ${final1}点 | 2: ${final2}点 | 3: ${final3}点
-    `;
-}
-
-// 起動時に初期計算を実行
-calculate();
-</script>
-
-</body>
-</html>
