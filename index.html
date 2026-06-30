@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>カジナイトアカデミー 鍛冶スコア計算＆逆算ツール</title>
+    <title>カジナイトアカデミー 鍛冶スコア計算/逆算ツール</title>
     <style>
         :root {
             --bg-color: #1a1a24;
@@ -512,22 +512,22 @@
     </div>
 
     <div class="result-box">
-        <div>獲得鍛冶スコア (現在の状態の合計値)</div>
+        <div>獲得鍛冶スコア</div>
         <div class="total-score" id="totalScore">0</div>
     </div>
 
     <div class="search-box">
-        <h3>🎯 目標ポイント達成シミュレーター</h3>
+        <h3>目標ポイント逆算ツール</h3>
         <p style="font-size: 11px; color: #a0a0b0; text-align: center; margin: -5px 0 10px 0;">
             現在の盤面から、手持ちのストック表の範囲内で1手以内に目標点にする手順を割り出します。
         </p>
 
         <div class="stock-section">
-            <div class="stock-section-title">📦 手持ちのストックアイテム（直接タップで増減）</div>
+            <div class="stock-section-title">ストック中の鍛冶レシピ</div>
             
             <div class="stock-status-bar">
                 <span>登録数: <strong id="totalStockDisp">0</strong> / <span id="maxStockDisp">3</span> 枠</span>
-                <button onclick="clearStock()" class="clear-btn">全クリア</button>
+                <button onclick="clearStock()" class="clear-btn">全てクリア</button>
             </div>
 
             <table class="stock-table">
@@ -589,15 +589,15 @@
         <div class="search-row">
             <label for="targetScore"><strong>目標ポイント:</strong></label>
             <input type="number" id="targetScore" value="20" min="0" class="search-input">
-            <button onclick="searchPatterns()" class="search-btn">手順を割り出す</button>
+            <button onclick="searchPatterns()" class="search-btn">手順の割り出し</button>
         </div>
         <div id="searchResults" class="search-results">
-            ストックを入力して「手順を割り出す」ボタンを押してください。
+            ストックを入力して「手順の割り出し」ボタンを押してください。
         </div>
     </div>
     
     <div class="warning-box">
-        ※当ツールは有志による計算シミュレーターです。細心の注意を払ってロジックを実装しておりますが、計算結果に間違いが含まれる可能性があります。あらかじめご了承ください。
+        ※計算結果に間違いが含まれる可能性があります。あらかじめご了承ください。
     </div>
 
     <div class="footer-links">
