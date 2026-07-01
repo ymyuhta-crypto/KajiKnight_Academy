@@ -22,6 +22,7 @@
             
             --slot1-bg: #5c007a;
             --slot-normal-bg: #1e293b;
+            --ore-box-bg: #2a2a2e;
         }
 
         body.light-mode {
@@ -32,10 +33,11 @@
             --accent-color: #4a5568;
             --accent-hover: #2d3748;
             --slot-normal-bg: #edf2f7;
+            --ore-box-bg: #f7fafc;
         }
 
         body {
-            font-family: 'Helvetica Neue', Arial, sans-serif;
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
             margin: 0;
@@ -87,12 +89,38 @@
             color: var(--text-color);
         }
 
+        /* 展開用ボタンスタイル */
+        .trigger-btn {
+            display: block;
+            width: 100%;
+            padding: 8px;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 10px;
+            transition: background 0.2s;
+        }
+        .trigger-btn:hover {
+            background-color: var(--border-color);
+        }
+
+        .matrix-wrapper {
+            display: none;
+            margin-top: 5px;
+            margin-bottom: 15px;
+        }
+
         /* 5x5 マトリクス選択スタイル */
         .matrix-table {
             width: 100%;
             border-collapse: collapse;
             font-size: 11px;
-            margin-bottom: 10px;
+            background-color: var(--card-bg);
         }
         .matrix-table th, .matrix-table td {
             border: 1px solid var(--border-color);
@@ -103,6 +131,18 @@
             background-color: rgba(0,0,0,0.1);
             font-weight: normal;
         }
+        
+        /* 縦行カラー装飾 */
+        .hdr-row-red { background-color: rgba(229, 62, 62, 0.15); color: var(--text-color); font-weight: bold; }
+        .hdr-row-blue { background-color: rgba(49, 130, 206, 0.15); color: var(--text-color); font-weight: bold; }
+        .hdr-row-yellow { background-color: rgba(221, 107, 32, 0.15); color: var(--text-color); font-weight: bold; }
+        .hdr-row-green { background-color: rgba(56, 161, 105, 0.15); color: var(--text-color); font-weight: bold; }
+        .hdr-row-gold { 
+            background: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%); 
+            color: #000000 !important; 
+            font-weight: bold; 
+        }
+
         .matrix-cell-btn {
             width: 100%;
             padding: 6px 2px;
@@ -142,8 +182,25 @@
         }
         .slot-container.slot-1 {
             background-color: var(--slot1-bg);
+            color: #ffffff !important;
+        }
+        /* ライトモード時のスロット1強制視認性確保 */
+        body.light-mode .slot-container.slot-1 {
+            color: #ffffff !important;
+        }
+        body.light-mode .slot-container.slot-1 .section-title {
+            color: #ffffff !important;
+            border-color: rgba(255, 255, 255, 0.3) !important;
+        }
+        body.light-mode .slot-container.slot-1 .trigger-btn {
+            background-color: rgba(255,255,255,0.1);
+            color: #ffffff;
+            border-color: rgba(255,255,255,0.3);
+        }
+        body.light-mode .slot-container.slot-1 .matrix-cell-btn {
             color: #ffffff;
         }
+
         .slot-layout {
             display: flex;
             gap: 15px;
@@ -159,47 +216,59 @@
             border: 1px solid rgba(255,255,255,0.1);
         }
 
-        /* 正方形鉱石ボタン */
+        /* 鉱石デザイン（黒縁・ゴシック体徹底） */
         .ore-grid {
             display: flex;
-            gap: 4px;
+            gap: 5px;
             flex-wrap: wrap;
             margin-top: 5px;
         }
         .ore-square {
-            width: 32px;
-            height: 32px;
+            width: 34px;
+            height: 34px;
             border-radius: 4px;
-            border: 1px solid #4a5568;
-            background: #2d3748;
-            color: #ffffff;
+            border: 2px solid #000000; /* 正方形に黒い縁取り */
+            background: var(--ore-box-bg);
+            font-family: sans-serif; /* ゴシック体 */
             font-weight: bold;
-            font-size: 11px;
+            font-size: 14px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             user-select: none;
+            box-sizing: border-box;
+            /* 文字に黒い縁取り */
+            text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000; 
         }
-        .ore-square.active-R { background-color: var(--color-red); border-color: #feb2b2; }
-        .ore-square.active-B { background-color: var(--color-blue); border-color: #90cdf4; }
-        .ore-square.active-Y { background-color: var(--color-yellow); border-color: #fbd38d; }
-        .ore-square.active-G { background-color: var(--color-green); border-color: #9ae6b4; }
         
-        /* ALLグラデーション指定 */
+        /* 各フォント色の対応 */
+        .ore-square.ore-R { color: var(--color-red); }
+        .ore-square.ore-B { color: var(--color-blue); }
+        .ore-square.ore-Y { color: var(--color-yellow); }
+        .ore-square.ore-G { color: var(--color-green); }
+
+        /* 選択時（アクティブ）のシックな背景変化 */
+        .ore-square.active-R { background-color: #4a1d1d; }
+        .ore-square.active-B { background-color: #1a2e40; }
+        .ore-square.active-Y { background-color: #4a3b1a; }
+        .ore-square.active-G { background-color: #1a3a24; }
+        body.light-mode .ore-square.active-R { background-color: #fed7d7; }
+        body.light-mode .ore-square.active-B { background-color: #bee3f8; }
+        body.light-mode .ore-square.active-Y { background-color: #feebc8; }
+        body.light-mode .ore-square.active-G { background-color: #c6f6d5; }
+        
+        /* ALLボタン仕様：3色グラデーション、白文字ゴシック、双方に黒縁 */
         .ore-square.ore-all-style {
             background: linear-gradient(to bottom, #00ffff, #ffffff, #ff00ff);
-            border-color: #cbd5e0;
+            border: 2px solid #000000;
+            color: #ffffff;
         }
         .ore-square.ore-all-style .all-text {
-            background: #ffffff;
-            color: #000000;
-            border: 1px solid #000000;
-            padding: 1px 3px;
-            font-size: 9px;
+            font-family: sans-serif;
             font-weight: bold;
-            border-radius: 2px;
-            line-height: 1;
+            font-size: 10px;
+            text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
         }
 
         .panel-box {
@@ -290,7 +359,7 @@
         }
         .result-row-item:hover { background: rgba(0,0,0,0.05); }
 
-        /* 訓練セクション */
+        /* 訓練セクション：2行3列配置、角丸長方形 */
         .advanced-section {
             display: none;
             flex-direction: column;
@@ -300,24 +369,59 @@
         }
         .training-matrix {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(2, auto);
             gap: 8px;
         }
         .train-block {
             background: rgba(0,0,0,0.05);
             border: 1px solid var(--border-color);
-            border-radius: 4px;
+            border-radius: 8px; /* 角を丸める */
             padding: 8px;
             cursor: pointer;
+            min-height: 65px;
+            box-sizing: border-box;
         }
         .train-block.focused {
             border: 1px solid var(--text-color);
             background: rgba(0,0,0,0.15);
         }
-        .train-lbl { font-size: 11px; font-weight: bold; margin-bottom: 2px;}
-        .train-val { font-size: 11px; font-family: monospace; min-height: 14px; }
+        .train-lbl { font-size: 11px; font-weight: bold; margin-bottom: 4px;}
+        
+        /* 訓練内チップ出力エリア：5つで折り返す寸法 */
+        .train-val { 
+            display: flex; 
+            flex-wrap: wrap; 
+            gap: 3px; 
+            width: 100%;
+            max-width: 115px; /* 20px+3px = 23px * 5 = 115px で最適改行 */
+        }
 
-        /* 入力パッドフォント色指定 */
+        /* 訓練文字の正方形チップデザイン（ゴシック・黒縁） */
+        .train-chip {
+            width: 20px;
+            height: 20px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-family: sans-serif;
+            font-weight: 900;
+            font-size: 12px;
+            border: 1px solid #000000; /* 黒い縁取り */
+            border-radius: 3px;
+            background-color: #2d3748;
+            box-sizing: border-box;
+            text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000; /* 文字の黒縁 */
+        }
+        body.light-mode .train-chip { background-color: #e2e8f0; }
+        
+        .chip-R { color: var(--color-red); }
+        .chip-B { color: var(--color-blue); }
+        .chip-Y { color: var(--color-yellow); }
+        .chip-G { color: var(--color-green); }
+        .chip-N { color: #a0aec0; }
+
+        /* パッドボタン */
         .pad-box {
             display: flex;
             flex-direction: column;
@@ -365,8 +469,11 @@
     <div class="slot-container slot-1">
         <div class="slot-layout">
             <div class="slot-main">
-                <div class="section-title" style="color:#ffffff; border-color:rgba(255,255,255,0.2);">スロット 1 (特殊指定領域)</div>
-                <div id="slot-matrix-1"></div>
+                <div class="section-title">スロット 1</div>
+                <button class="trigger-btn" onclick="toggleWrapper('slot-matrix-wrapper-1')">[ アイテムを入力 ]</button>
+                <div id="slot-matrix-wrapper-1" class="matrix-wrapper">
+                    <div id="slot-matrix-1"></div>
+                </div>
             </div>
             <div class="slot-side">
                 <div style="font-size:11px; font-weight:bold;">引き継ぎ鉱石</div>
@@ -379,7 +486,10 @@
         <div class="slot-layout">
             <div class="slot-main">
                 <div class="section-title">スロット 2</div>
-                <div id="slot-matrix-2"></div>
+                <button class="trigger-btn" onclick="toggleWrapper('slot-matrix-wrapper-2')">[ アイテムを入力 ]</button>
+                <div id="slot-matrix-wrapper-2" class="matrix-wrapper">
+                    <div id="slot-matrix-2"></div>
+                </div>
             </div>
             <div class="slot-side">
                 <div style="font-size:11px; font-weight:bold;">引き継ぎ鉱石</div>
@@ -392,7 +502,10 @@
         <div class="slot-layout">
             <div class="slot-main">
                 <div class="section-title">スロット 3</div>
-                <div id="slot-matrix-3"></div>
+                <button class="trigger-btn" onclick="toggleWrapper('slot-matrix-wrapper-3')">[ アイテムを入力 ]</button>
+                <div id="slot-matrix-wrapper-3" class="matrix-wrapper">
+                    <div id="slot-matrix-3"></div>
+                </div>
             </div>
             <div class="slot-side">
                 <div style="font-size:11px; font-weight:bold;">引き継ぎ鉱石</div>
@@ -403,7 +516,11 @@
 
     <div class="panel-box">
         <div class="section-title">手持ストックアイテム数量設定</div>
-        <div id="stock-matrix-container"></div>
+        <button class="trigger-btn" onclick="toggleWrapper('stock-matrix-wrapper')">[ ストック数量を入力 ]</button>
+        <div id="stock-matrix-wrapper" class="matrix-wrapper">
+            <div id="stock-matrix-container"></div>
+        </div>
+        
         <div class="control-row">
             <span>登録総数: <strong id="lbl-total-stock">0</strong> / <span id="lbl-max-stock">3</span> 枠</span>
             <button onclick="resetStockMatrix()" style="padding:2px 6px; font-size:11px; cursor:pointer;">全リセット</button>
@@ -442,6 +559,7 @@
         <div id="adv-retained-sync-area" style="background:rgba(0,0,0,0.05); padding:8px; border-radius:4px; display:flex; flex-direction:column; gap:8px;"></div>
 
         <div style="font-size:12px; font-weight:bold; margin-top:5px; margin-bottom:4px;">2. 6種訓練における鉱石分布入力</div>
+        
         <div class="training-matrix">
             <div id="tb-0" class="train-block focused" onclick="setTrainingFocus(0)"><div class="train-lbl">持久力</div><div id="td-0" class="train-val"></div></div>
             <div id="tb-1" class="train-block" onclick="setTrainingFocus(1)"><div class="train-lbl">筋力</div><div id="td-1" class="train-val"></div></div>
@@ -547,13 +665,23 @@ function toggleDisplayMode() {
     }
 }
 
+// 表の開閉制御
+function toggleWrapper(id) {
+    const el = document.getElementById(id);
+    if(el.style.display === 'block') {
+        el.style.display = 'none';
+    } else {
+        el.style.display = 'block';
+    }
+}
+
 function initSystem() {
     renderSlotMatrices();
     renderStockMatrix();
     syncRetainedOres();
 }
 
-// 5x5 スロット選択マトリクスの描画
+// 5x5 スロット選択マトリクスの描画（縦行に配色クラスを付与）
 function renderSlotMatrices() {
     for (let s = 1; s <= 3; s++) {
         let html = `<table class="matrix-table"><thead><tr><th></th>`;
@@ -561,7 +689,7 @@ function renderSlotMatrices() {
         html += `</tr></thead><tbody>`;
         
         COLOR_KEYS.forEach(c => {
-            html += `<tr><td style="font-weight:bold;">${COLOR_JA[c]}</td>`;
+            html += `<tr><td class="hdr-row-${c}">${COLOR_JA[c]}</td>`;
             TYPE_KEYS.forEach(t => {
                 const isActive = (slotSelections[s].color === c && slotSelections[s].type === t) ? 'active ' + (c === 'gold' ? 'gold' : c[0]) : '';
                 html += `<td><button class="matrix-cell-btn ${isActive}" onclick="selectSlotItem(${s}, '${c}', '${t}')">選択</button></td>`;
@@ -569,7 +697,7 @@ function renderSlotMatrices() {
             html += `</tr>`;
         });
         html += `</tbody></table>`;
-        document.getElementById(`slot-matrix-1`).parentElement.id === `slot-matrix-${s}` ? null : document.getElementById(`slot-matrix-${s}`).innerHTML = html;
+        document.getElementById(`slot-matrix-${s}`).innerHTML = html;
     }
 }
 
@@ -580,14 +708,14 @@ function selectSlotItem(slot, color, type) {
     syncRetainedOres();
 }
 
-// 5x5 手持ストックマトリクスの描画
+// 5x5 手持ストックマトリクスの描画（縦行に配色クラスを付与）
 function renderStockMatrix() {
     let html = `<table class="matrix-table"><thead><tr><th></th>`;
     TYPE_KEYS.forEach(t => html += `<th>${TYPE_JA[t]}</th>`);
     html += `</tr></thead><tbody>`;
     
     COLOR_KEYS.forEach(c => {
-        html += `<tr><td style="font-weight:bold;">${COLOR_JA[c]}</td>`;
+        html += `<tr><td class="hdr-row-${c}">${COLOR_JA[c]}</td>`;
         TYPE_KEYS.forEach(t => {
             html += `<td><input type="number" min="0" value="${stockMatrix[c][t]}" class="stock-input" onchange="updateStockValue('${c}', '${t}', this.value)"></td>`;
         });
@@ -628,7 +756,7 @@ function processLevelTransition() {
     calculateTotalStock();
 }
 
-// 引き継ぎ鉱石領域の同期描画
+// 引き継ぎ鉱石領域の同期描画（要望に準じた黒縁装飾仕様）
 function syncRetainedOres() {
     const advSyncArea = document.getElementById('adv-retained-sync-area');
     if(advSyncArea) advSyncArea.innerHTML = "";
@@ -652,10 +780,14 @@ function syncRetainedOres() {
         expectedOres.forEach((ore, idx) => {
             let activeClass = "";
             if (retainedOresState[s][idx]) {
-                activeClass = ore === 'ALL' ? 'ore-all-style' : `active-${ore}`;
+                activeClass = ` active-${ore}`;
             }
-            const innerContent = ore === 'ALL' ? `<span class="all-text">ALL</span>` : ore;
-            oreButtonsHtml += `<div class="ore-square ${activeClass}" onclick="toggleRetainedOreState(${s}, ${idx})">${innerContent}</div>`;
+            
+            if (ore === 'ALL') {
+                oreButtonsHtml += `<div class="ore-square ore-all-style${activeClass}" onclick="toggleRetainedOreState(${s}, ${idx})"><span class="all-text">ALL</span></div>`;
+            } else {
+                oreButtonsHtml += `<div class="ore-square ore-${ore}${activeClass}" onclick="toggleRetainedOreState(${s}, ${idx})">${ore}</div>`;
+            }
         });
 
         document.getElementById(`slot-retained-${s}`).innerHTML = oreButtonsHtml || `<span style="font-size:10px;color:#718096;">不要</span>`;
@@ -706,8 +838,16 @@ function handlePadInput(cmd) {
     }
 }
 
+// 訓練入力文字の正方形チップ化出力処理（5つで自動改行）
 function refreshTrainingDisplay(idx) {
-    document.getElementById(`td-${idx}`).innerText = trainingData[idx].join(', ');
+    const container = document.getElementById(`td-${idx}`);
+    container.innerHTML = '';
+    trainingData[idx].forEach(ore => {
+        const chip = document.createElement('span');
+        chip.className = `train-chip chip-${ore}`;
+        chip.innerText = ore;
+        container.appendChild(chip);
+    });
 }
 
 // スコア算定コア
@@ -999,7 +1139,7 @@ function renderFlowchart(idx) {
     target.scrollIntoView({ behavior: 'smooth' });
 }
 
-// 構築開始
+// 初期化処理起動
 initSystem();
 </script>
 
