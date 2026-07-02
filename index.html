@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>高度鍛冶シミュレーションシステム</title>
+    <title>カジナイトアカデミー鍛冶指図書</title>
     <style>
         :root {
             --bg-color: #121214;
@@ -65,9 +65,10 @@
         }
 
         h1 {
-            font-size: 20px;
+            font-size: 22px;
             margin: 0;
             font-weight: bold;
+            letter-spacing: 1px;
         }
 
         .mode-toggle {
@@ -80,7 +81,7 @@
             cursor: pointer;
         }
 
-        /* 2x2 グリッドレイアウトの設定 */
+        /* 2x2 グリッドレイアウト */
         .main-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -108,12 +109,19 @@
             box-sizing: border-box;
         }
 
+        .section-title-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
         .section-title {
             font-size: 14px;
             font-weight: bold;
-            margin: 0 0 10px 0;
-            padding-bottom: 5px;
-            border-bottom: 1px solid var(--border-color);
+            margin: 0;
             color: var(--text-color);
         }
 
@@ -127,7 +135,7 @@
             color: #000000 !important; 
         }
 
-        /* テンプカラーテキスト表示用 */
+        /* テキスト表示用 */
         .text-red { color: #ff3b30 !important; }
         .text-blue { color: #007aff !important; }
         .text-yellow { color: #ff9500 !important; }
@@ -181,7 +189,6 @@
             font-weight: bold;
         }
         
-        /* 行ごとの薄い対応色ベース */
         .matrix-row-red { background-color: rgba(255, 59, 48, 0.08); }
         .matrix-row-blue { background-color: rgba(0, 122, 255, 0.08); }
         .matrix-row-yellow { background-color: rgba(255, 149, 0, 0.08); }
@@ -209,7 +216,7 @@
             color: #000000 !important; 
         }
 
-        /* ライトモード時のスロット1表の白文字化バグ対策 */
+        /* ライトモードバグ対策 */
         body.light-mode .slot-1 .matrix-wrapper { background-color: #ffffff; color: #2d3748; }
         body.light-mode .slot-1 .matrix-table th { color: #2d3748; background-color: #f7fafc; }
         body.light-mode .slot-1 .matrix-table td button:not(.active) { color: #2d3748; }
@@ -226,7 +233,8 @@
             color: #ffffff !important;
         }
         body.light-mode .slot-container.slot-1 { color: #ffffff !important; }
-        body.light-mode .slot-container.slot-1 .section-title { color: #ffffff !important; border-color: rgba(255, 255, 255, 0.3) !important; }
+        body.light-mode .slot-container.slot-1 .section-title { color: #ffffff !important; }
+        body.light-mode .slot-container.slot-1 .section-title-container { border-color: rgba(255, 255, 255, 0.3) !important; }
         body.light-mode .slot-container.slot-1 .trigger-btn:not([class*="btn-active"]) { background-color: rgba(255,255,255,0.1); color: #ffffff; border-color: rgba(255,255,255,0.3); }
 
         .slot-layout { display: flex; gap: 12px; align-items: flex-start; }
@@ -240,7 +248,7 @@
             border: 1px solid rgba(255,255,255,0.1);
         }
 
-        /* 鉱石デザイン（ON時のフォント色をテーマ連動に変更） */
+        /* 鉱石デザイン */
         .ore-grid { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 5px; }
         .ore-square {
             width: 32px;
@@ -265,7 +273,6 @@
         .ore-square.ore-Y { color: var(--color-yellow); }
         .ore-square.ore-G { color: var(--color-green); }
 
-        /* 有色鉱石ON時：テーマに応じたフォント色 */
         .ore-square.active-R { background-color: #ff3b30 !important; color: #ffffff !important; }
         .ore-square.active-B { background-color: #007aff !important; color: #ffffff !important; }
         .ore-square.active-Y { background-color: #ff9500 !important; color: #ffffff !important; }
@@ -276,11 +283,20 @@
         .ore-square.ore-all-style.active-ALL { background: linear-gradient(to bottom, #00ffff, #ffffff, #ff00ff) !important; color: #000000 !important;}
         .ore-square.ore-all-style .all-text { font-family: sans-serif; font-weight: bold; font-size: 10px; }
 
-        /* 手持ストックアイテム用 3行2列デザイン */
+        /* 手持ストックアイテム用デザイン */
+        .stock-header-control {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            background: rgba(0,0,0,0.05);
+            padding: 8px 12px;
+            border-radius: 4px;
+            margin-bottom: 12px;
+            font-size: 12px;
+        }
         .stock-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            grid-template-rows: repeat(3, auto);
             gap: 8px;
             margin-bottom: 12px;
         }
@@ -316,7 +332,7 @@
         }
         .input-item { display: flex; justify-content: space-between; align-items: center; }
         .sys-input { width: 80px; padding: 4px; border-radius: 4px; border: 1px solid var(--border-color); background: transparent; color: var(--text-color); text-align: center; }
-        .sys-select { width: 90px; padding: 4px; border-radius: 4px; border: 1px solid var(--border-color); background: transparent; color: var(--text-color); }
+        .sys-select { padding: 4px; border-radius: 4px; border: 1px solid var(--border-color); background: transparent; color: var(--text-color); font-size: 12px; }
 
         .action-btn { width: 100%; padding: 10px; background-color: var(--accent-color); color: #ffffff; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 13px; }
         .action-btn:hover { background-color: var(--accent-hover); }
@@ -329,14 +345,14 @@
         .result-row-item:hover { background: rgba(0,0,0,0.05); }
 
         /* 訓練セクション：2行3列配置 */
-        .training-matrix { display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(2, auto); gap: 8px; margin-bottom: 10px; }
+        .training-matrix { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 10px; }
         .train-block { background: rgba(0,0,0,0.03); border: 1px solid var(--border-color); border-radius: 8px; padding: 8px; cursor: pointer; min-height: 65px; box-sizing: border-box; }
         body.light-mode .train-block { background: #edf2f7; }
         .train-block.focused { border: 2px solid var(--text-color); background: rgba(0,0,0,0.08); }
         .train-lbl { font-size: 11px; font-weight: bold; margin-bottom: 4px;}
         .train-val { display: flex; flex-wrap: wrap; gap: 3px; width: 100%; }
 
-        /* 訓練内正方形チップ */
+        /* 訓練内チップ */
         .train-chip { width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center; font-family: sans-serif; font-weight: 900; font-size: 11px; border: 1px solid #000000; border-radius: 3px; box-sizing: border-box; }
         .train-chip.chip-R { background-color: rgba(255, 59, 48, 0.25); color: var(--color-red); }
         .train-chip.chip-B { background-color: rgba(0, 122, 255, 0.25); color: var(--color-blue); }
@@ -358,14 +374,47 @@
         body.light-mode .p-btn:not(.sys-op) { color: #000000; font-weight: 900; }
 
         .flow-container { background: rgba(0,0,0,0.15); border-left: 3px solid var(--accent-color); padding: 10px; border-radius: 0 4px 4px 0; font-size: 11px; line-height: 1.6; margin-top: 10px;}
-        .info-text { font-size: 11px; color: #718096; text-align: center; margin-top: 10px; }
+        
+        /* 最終結果用黒太文字スタイル */
+        .flow-final-result {
+            margin-top: 8px; 
+            font-weight: bold !important; 
+            color: #000000 !important; 
+            background-color: #ffffff; 
+            padding: 4px 8px; 
+            border-radius: 3px; 
+            display: inline-block;
+            border: 1px solid #000000;
+        }
+
+        /* SNS・コミュニティリンクエリア */
+        .sns-share-area {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+            padding: 10px;
+            background: rgba(0,0,0,0.1);
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+        }
+        .sns-link {
+            font-size: 12px;
+            font-weight: bold;
+            color: #007aff;
+            text-decoration: none;
+        }
+        .dark-mode .sns-link { color: #63b3ed; }
+        .sns-link:hover { text-decoration: underline; }
+
+        .info-text { font-size: 11px; color: #718096; text-align: center; margin-top: 5px; }
     </style>
 </head>
 <body class="dark-mode">
 
 <div class="container">
     <div class="header-area">
-        <h1>高度鍛冶シミュレーションシステム</h1>
+        <h1>カジナイトアカデミー鍛冶指図書</h1>
         <button class="mode-toggle" onclick="toggleDisplayMode()">表示モード切替</button>
     </div>
 
@@ -375,7 +424,7 @@
             <div class="slot-container slot-1">
                 <div class="slot-layout">
                     <div class="slot-main">
-                        <div class="section-title">スロット 1</div>
+                        <div class="section-title-container"><div class="section-title">スロット 1</div></div>
                         <button id="slot-trigger-btn-1" class="trigger-btn" onclick="toggleWrapper('slot-matrix-wrapper-1')">[ アイテムを入力 ]</button>
                         <div id="slot-matrix-wrapper-1" class="matrix-wrapper">
                             <div id="slot-matrix-1"></div>
@@ -391,7 +440,7 @@
             <div class="slot-container">
                 <div class="slot-layout">
                     <div class="slot-main">
-                        <div class="section-title">スロット 2</div>
+                        <div class="section-title-container"><div class="section-title">スロット 2</div></div>
                         <button id="slot-trigger-btn-2" class="trigger-btn" onclick="toggleWrapper('slot-matrix-wrapper-2')">[ アイテムを入力 ]</button>
                         <div id="slot-matrix-wrapper-2" class="matrix-wrapper">
                             <div id="slot-matrix-2"></div>
@@ -407,7 +456,7 @@
             <div class="slot-container">
                 <div class="slot-layout">
                     <div class="slot-main">
-                        <div class="section-title">スロット 3</div>
+                        <div class="section-title-container"><div class="section-title">スロット 3</div></div>
                         <button id="slot-trigger-btn-3" class="trigger-btn" onclick="toggleWrapper('slot-matrix-wrapper-3')">[ アイテムを入力 ]</button>
                         <div id="slot-matrix-wrapper-3" class="matrix-wrapper">
                             <div id="slot-matrix-3"></div>
@@ -422,7 +471,22 @@
         </div>
 
         <div class="panel-box">
-            <div class="section-title">手持ストックアイテム設定（3行2列）</div>
+            <div class="section-title-container">
+                <div class="section-title">手持ストックアイテム設定</div>
+                <button onclick="resetAllStockSlots()" style="padding:3px 8px; font-size:11px; cursor:pointer; font-weight:bold;">ストック全リセット</button>
+            </div>
+            
+            <div class="stock-header-control">
+                <label>現在の鍛冶師段位:</label>
+                <select id="sys-level" onchange="processLevelTransition()" class="sys-select">
+                    <option value="見習い">見習い（ストック枠: 3）</option>
+                    <option value="三級">三級（ストック枠: 4）</option>
+                    <option value="二級">二級（ストック枠: 5）</option>
+                    <option value="一級">一級（ストック枠: 6）</option>
+                </select>
+                <span style="margin-left:auto;">登録数: <strong id="lbl-total-stock">0</strong> / <span id="lbl-max-stock">3</span> 枠</span>
+            </div>
+
             <div id="stock-slots-container" class="stock-grid"></div>
             
             <div id="stock-matrix-wrapper" class="matrix-wrapper">
@@ -430,15 +494,11 @@
                 <div id="stock-matrix-container"></div>
             </div>
             
-            <div class="control-row">
-                <span>登録総数: <strong id="lbl-total-stock">0</strong> / <span id="lbl-max-stock">3</span> 枠</span>
-                <button onclick="resetAllStockSlots()" style="padding:2px 6px; font-size:11px; cursor:pointer;">全リセット</button>
-            </div>
             <div id="adv-retained-sync-area" style="background:rgba(0,0,0,0.03); padding:8px; border-radius:4px; display:flex; flex-direction:column; gap:6px; font-size:11px;"></div>
         </div>
 
         <div class="panel-box">
-            <div class="section-title">6種訓練における鉱石分布入力</div>
+            <div class="section-title-container"><div class="section-title">6種訓練における鉱石分布入力</div></div>
             <div class="training-matrix">
                 <div id="tb-0" class="train-block focused" onclick="setTrainingFocus(0)"><div class="train-lbl">持久力</div><div id="td-0" class="train-val"></div></div>
                 <div id="tb-1" class="train-block" onclick="setTrainingFocus(1)"><div class="train-lbl">筋力</div><div id="td-1" class="train-val"></div></div>
@@ -465,15 +525,9 @@
         </div>
 
         <div class="panel-box">
-            <div class="section-title">分析条件 ＆ シミュレーション結果</div>
+            <div class="section-title-container"><div class="section-title">分析条件 ＆ シミュレーション結果</div></div>
             
             <div class="input-group" style="margin-bottom:12px;">
-                <div class="input-item">
-                    <label>現在の段位:</label>
-                    <select id="sys-level" onchange="processLevelTransition()" class="sys-select">
-                        <option value="見習い">見習い</option><option value="三級">三級</option><option value="二級">二級</option><option value="一級">一級</option>
-                    </select>
-                </div>
                 <div class="input-item">
                     <label>現在保有スコア:</label>
                     <input type="number" id="sys-cur-score" value="0" min="0" class="sys-input">
@@ -490,7 +544,7 @@
             <button onclick="executeAdvancedAnalysis()" class="action-btn" style="margin-bottom:10px;">手順の分析実行</button>
             
             <div class="control-row" style="margin-top:5px; margin-bottom:5px;">
-                <span>結果一覧</span>
+                <span>分析結果一覧</span>
                 <button id="btn-toggle-sort" class="sort-toggle-btn" onclick="toggleSortOrder()">降順にする</button>
             </div>
 
@@ -500,8 +554,14 @@
 
     </div>
 
+    <div class="sns-share-area">
+        <a href="https://twitter.com/intent/tweet?text=鍛冶シミュレータ結果報告" target="_blank" class="sns-link">𝕏 (Twitter)でシェア</a>
+        <a href="#" class="sns-link">カジナイト攻略Discord</a>
+        <a href="#" class="sns-link">総合Wiki指図書スレッド</a>
+    </div>
+
     <div class="info-text">
-        ※本システムは有志による計算結果の試算モデルです。実際のゲーム内挙動と異なる場合があります。
+        ※本システムは有志による計算の試算モデルです。実際のゲーム内挙動と異なる場合があります。
     </div>
 </div>
 
@@ -521,7 +581,6 @@ const RECIPES = {
     gold: { kakashi: { R: 0, B: 0, Y: 1, G: 0, ALL: 0 }, ring: { R: 0, B: 0, Y: 1, G: 0, ALL: 1 }, charm: { R: 0, B: 0, Y: 1, G: 0, ALL: 2 }, bracelet: { R: 0, B: 0, Y: 1, G: 0, ALL: 3 }, necklace: { R: 0, B: 0, Y: 1, G: 0, ALL: 4 } }
 };
 
-// 初期状態
 let slotSelections = {
     1: { color: 'red', type: 'kakashi' },
     2: { color: 'blue', type: 'kakashi' },
@@ -565,7 +624,6 @@ function initSystem() {
     syncRetainedOres();
 }
 
-// スロットボタンテキスト＆色連動
 function updateSlotTriggerButton(slot) {
     const btn = document.getElementById(`slot-trigger-btn-${slot}`);
     const sel = slotSelections[slot];
@@ -582,7 +640,6 @@ function updateAllSlotButtons() {
     for (let s = 1; s <= 3; s++) updateSlotTriggerButton(s);
 }
 
-// 5x5 スロットマトリクス(ヘッダー空欄化)
 function renderSlotMatrices() {
     for (let s = 1; s <= 3; s++) {
         let html = `<table class="matrix-table"><thead><tr><th></th>`;
@@ -597,7 +654,7 @@ function renderSlotMatrices() {
             });
             html += `</tr>`;
         });
-        html += `</tbody></table>`;
+        html += `</tr></tbody></table>`;
         document.getElementById(`slot-matrix-${s}`).innerHTML = html;
     }
 }
@@ -611,7 +668,6 @@ function selectSlotItem(slot, color, type) {
     document.getElementById(`slot-matrix-wrapper-${slot}`).style.display = 'none';
 }
 
-// 右上：手持ストック（3行2列）描画
 function renderStockSlotsUI() {
     const container = document.getElementById('stock-slots-container');
     const limit = RANK_LIMITS[document.getElementById('sys-level').value] || 3;
@@ -639,7 +695,6 @@ function renderStockSlotsUI() {
     calculateTotalStock();
 }
 
-// ストックマトリクス：重複時は「取消」表記
 function openStockMatrix(idx) {
     currentStockFocus = idx;
     const wrapper = document.getElementById('stock-matrix-wrapper');
@@ -674,7 +729,7 @@ function openStockMatrix(idx) {
 function selectStockItem(color, type) {
     const cur = stockSlots[currentStockFocus];
     if (cur.color === color && cur.type === type) {
-        stockSlots[currentStockFocus] = { color: null, type: null }; // 取消時空枠化
+        stockSlots[currentStockFocus] = { color: null, type: null };
     } else {
         stockSlots[currentStockFocus] = { color, type };
     }
@@ -706,10 +761,9 @@ function processLevelTransition() {
     renderStockSlotsUI();
 }
 
-// 引き継ぎ鉱石（緑の腕輪 GGRN 配列最適化＆フォント連動）
 function syncRetainedOres() {
     const advSyncArea = document.getElementById('adv-retained-sync-area');
-    if(advSyncArea) advSyncArea.innerHTML = "<strong>引き継ぎ鉱石の現在状態同期:</strong>";
+    if(advSyncArea) advSyncArea.innerHTML = "<strong>スロット内引き継ぎ鉱石の状態同期:</strong>";
 
     for (let s = 1; s <= 3; s++) {
         const color = slotSelections[s].color;
@@ -718,7 +772,7 @@ function syncRetainedOres() {
         
         let expectedOres = [];
         if (color === 'green' && type === 'bracelet') {
-            expectedOres = ['G', 'G', 'R', 'ALL']; // 緑の腕輪専用順
+            expectedOres = ['G', 'G', 'R', 'ALL'];
         } else {
             ['R', 'B', 'Y', 'G'].forEach(k => { for(let i=0; i<recipe[k]; i++) expectedOres.push(k); });
             for(let i=0; i<recipe.ALL; i++) expectedOres.push('ALL');
@@ -759,18 +813,17 @@ function setTrainingFocus(idx) {
     document.getElementById(`tb-${idx}`).classList.add('focused');
 }
 
-// 鉱石分布入力（R, B, Y, G, N 自動ソート実装）
 function handlePadInput(cmd) {
     if (['R', 'B', 'Y', 'G', 'N'].includes(cmd)) {
         trainingData[currentTrainFocus].push(cmd);
         const sortOrder = { 'R': 1, 'B': 2, 'Y': 3, 'G': 4, 'N': 5 };
-        trainingData[currentTrainFocus].sort((a, b) => sortOrder[a] - sortOrder[b]); // 自動並び替え
+        trainingData[currentTrainFocus].sort((a, b) => sortOrder[a] - sortOrder[b]);
         refreshTrainingDisplay(currentTrainFocus);
     } else if (cmd === 'DEL') {
         trainingData[currentTrainFocus].pop();
         refreshTrainingDisplay(currentTrainFocus);
     } else if (cmd === 'RESET') {
-        trainingData[currentTrainFocus] = []; // 該当箇所リセット
+        trainingData[currentTrainFocus] = [];
         refreshTrainingDisplay(currentTrainFocus);
     } else if (cmd === 'ENTER') {
         if (currentTrainFocus < 5) setTrainingFocus(currentTrainFocus + 1);
@@ -835,7 +888,7 @@ function computePatternScore(s1, s2, s3, level) {
     return { total: (f1 + f2 + f3) + cBonus + tBonus, f1, f2, f3 };
 }
 
-// 分析シミュレーションのメイン集約
+// 【重要】スロットから取り外したアイテムも変換・別枠へ融通可能な拡張シミュレーションロジック
 function executeAdvancedAnalysis() {
     const curScore = parseInt(document.getElementById('sys-cur-score').value) || 0;
     const tarScore = parseInt(document.getElementById('sys-tar-score').value) || 0;
@@ -844,48 +897,58 @@ function executeAdvancedAnalysis() {
     const lv = document.getElementById('sys-level').value;
     const limit = RANK_LIMITS[lv] || 3;
 
-    let flatStock = [];
+    // 1. 全体で利用可能な「アセットアイテム群」のプールを作成
+    // スロットの初期アイテム3つ＋手持ストック上限枠を合算
+    let itemPool = [];
+    
+    // スロット内アイテム(インデックス 0, 1, 2 としてマーク)
+    itemPool.push({ origin: 'slot1', color: slotSelections[1].color, type: slotSelections[1].type });
+    itemPool.push({ origin: 'slot2', color: slotSelections[2].color, type: slotSelections[2].type });
+    itemPool.push({ origin: 'slot3', color: slotSelections[3].color, type: slotSelections[3].type });
+    
+    // 手持ちストックアイテム
     for (let i = 0; i < limit; i++) {
         if (stockSlots[i].color && stockSlots[i].type) {
-            flatStock.push({ color: stockSlots[i].color, type: stockSlots[i].type });
+            itemPool.push({ origin: `stock${i}`, color: stockSlots[i].color, type: stockSlots[i].type });
         }
     }
 
     advancedSolutions = [];
-    let swapSets = [[null], [null], [null]];
-    flatStock.forEach((st, idx) => {
-        if(st.color === slotSelections[1].color || st.type === slotSelections[1].type) swapSets[0].push(idx);
-        if(st.color === slotSelections[2].color || st.type === slotSelections[2].type) swapSets[1].push(idx);
-        if(st.color === slotSelections[3].color || st.type === slotSelections[3].type) swapSets[2].push(idx);
-    });
 
-    for (let c0 of swapSets[0]) {
-        for (let c1 of swapSets[1]) {
-            for (let c2 of swapSets[2]) {
-                let u = new Set();
-                if(c0 !== null) u.add(c0);
-                if(c1 !== null) { if(u.has(c1)) continue; u.add(c1); }
-                if(c2 !== null) { if(u.has(c2)) continue; u.add(c2); }
+    // 2. プールの中から「新たにスロット1,2,3に配置する3つのアイテム」の全組み合わせを全探索
+    const pLen = itemPool.length;
+    for (let i = 0; i < pLen; i++) {
+        for (let j = 0; j < pLen; j++) {
+            if (i === j) continue;
+            for (let k = 0; k < pLen; k++) {
+                if (i === k || j === k) continue;
 
-                let activeSlots = [
-                    c0 === null ? slotSelections[1] : flatStock[c0],
-                    c1 === null ? slotSelections[2] : flatStock[c1],
-                    c2 === null ? slotSelections[3] : flatStock[c2]
-                ];
+                // 選択された配置アイテム
+                let activeSlots = [itemPool[i], itemPool[j], itemPool[k]];
 
-                let remStocks = [];
-                flatStock.forEach((st, idx) => { if(!u.has(idx)) remStocks.push(st); });
+                // 配置されずに「余った」アイテム。これらはすべて鉱石変換素材に回せる
+                let unusedItems = [];
+                for (let m = 0; m < pLen; m++) {
+                    if (m !== i && m !== j && m !== k) {
+                        unusedItems.push(itemPool[m]);
+                    }
+                }
 
+                // 余ったアイテムから、実際にどのアイテムを鉱石にバラすかの全組み合わせ（べき集合）
+                let uLen = unusedItems.length;
                 let convCombos = [[]];
-                const len = remStocks.length;
-                for(let i=1; i < (1 << len); i++) {
+                for (let mask = 1; mask < (1 << uLen); mask++) {
                     let combo = [];
-                    for(let j=0; j<len; j++) { if((i >> j) & 1) combo.push(remStocks[j]); }
+                    for (let m = 0; m < uLen; m++) {
+                        if ((mask >> m) & 1) combo.push(unusedItems[m]);
+                    }
                     convCombos.push(combo);
                 }
 
+                // 各変換パターンごとに処理
                 for (let convList of convCombos) {
-                    let cBonus = { R:0, B:0, Y:0, G:0 };
+                    // 変換によって得られるカラー鉱石ボーナス
+                    let cBonus = { R: 0, B: 0, Y: 0, G: 0 };
                     convList.forEach(item => {
                         if (item.color === 'gold') { cBonus.R++; cBonus.B++; cBonus.Y++; cBonus.G++; }
                         else if (item.color === 'red') cBonus.R++;
@@ -894,43 +957,63 @@ function executeAdvancedAnalysis() {
                         else if (item.color === 'green') cBonus.G++;
                     });
 
+                    // 6つの訓練の分布をそれぞれ検証
                     for (let t = 0; t < 6; t++) {
                         let tOres = trainingData[t];
-                        let tCounts = { R:0, B:0, Y:0, G:0, N:0 };
+                        let tCounts = { R: 0, B: 0, Y: 0, G: 0, N: 0 };
                         tOres.forEach(o => tCounts[o]++);
 
                         let compFlags = [false, false, false];
 
+                        // スロット1〜3の達成検証
                         for (let s = 0; s < 3; s++) {
                             const item = activeSlots[s];
                             const rec = RECIPES[item.color][item.type];
-                            let pool = { R: cBonus.R + tCounts.R, B: cBonus.B + tCounts.B, Y: cBonus.Y + tCounts.Y, G: cBonus.G + tCounts.G, N: tCounts.N };
                             
-                            if ((s === 0 && c0 === null) || (s === 1 && c1 === null) || (s === 2 && c2 === null)) {
-                                const states = retainedOresState[s+1] || [];
-                                const origRec = RECIPES[slotSelections[s+1].color][slotSelections[s+1].type];
+                            // 基本プール = 変換鉱石 + 訓練獲得鉱石
+                            let pool = { 
+                                R: cBonus.R + tCounts.R, 
+                                B: cBonus.B + tCounts.B, 
+                                Y: cBonus.Y + tCounts.Y, 
+                                G: cBonus.G + tCounts.G, 
+                                N: tCounts.N 
+                            };
+                            
+                            // 【重要条件】もしスロット(s+1)のアイテムが「動かされずそのままであった」場合のみ、
+                            // 既存の保持引き継ぎ鉱石をそのまま合算して使用できる
+                            if ((s === 0 && item.origin === 'slot1') || 
+                                (s === 1 && item.origin === 'slot2') || 
+                                (s === 2 && item.origin === 'slot3')) {
+                                
+                                const states = retainedOresState[s + 1] || [];
+                                const origRec = RECIPES[slotSelections[s + 1].color][slotSelections[s + 1].type];
                                 let origList = [];
-                                if (slotSelections[s+1].color === 'green' && slotSelections[s+1].type === 'bracelet') {
+                                if (slotSelections[s + 1].color === 'green' && slotSelections[s + 1].type === 'bracelet') {
                                     origList = ['G', 'G', 'R', 'ALL'];
                                 } else {
-                                    ['R', 'B', 'Y', 'G'].forEach(k => { for(let i=0; i<origRec[k]; i++) origList.push(k); });
-                                    for(let i=0; i<origRec.ALL; i++) origList.push('ALL');
+                                    ['R', 'B', 'Y', 'G'].forEach(k => { for(let n=0; n<origRec[k]; n++) origList.push(k); });
+                                    for(let n=0; n<origRec.ALL; n++) origList.push('ALL');
                                 }
                                 
                                 states.forEach((act, oIdx) => {
-                                    if(act && oIdx < origList.length) {
+                                    if (act && oIdx < origList.length) {
                                         let type = origList[oIdx];
                                         if (type === 'ALL') pool.N++; else pool[type]++;
                                     }
                                 });
                             }
 
-                            let dR = pool.R - rec.R; let dB = pool.B - rec.B; let dY = pool.Y - rec.Y; let dG = pool.G - rec.G;
+                            // 必要数チェック
+                            let dR = pool.R - rec.R; 
+                            let dB = pool.B - rec.B; 
+                            let dY = pool.Y - rec.Y; 
+                            let dG = pool.G - rec.G;
                             if (dR >= 0 && dB >= 0 && dY >= 0 && dG >= 0) {
                                 if ((dR + dB + dY + dG + pool.N) >= rec.ALL) compFlags[s] = true;
                             }
                         }
 
+                        // スコア計算
                         let scoreRes = computePatternScore(
                             { color: activeSlots[0].color, type: activeSlots[0].type, isCompleted: compFlags[0] },
                             { color: activeSlots[1].color, type: activeSlots[1].type, isCompleted: compFlags[1] },
@@ -940,7 +1023,14 @@ function executeAdvancedAnalysis() {
 
                         let valid = allowOver ? (scoreRes.total > 0) : (scoreRes.total === gap);
                         if (valid) {
-                            advancedSolutions.push({ swaps: [c0, c1, c2], activeSlots, converts: convList, trainIdx: t, trainName: TRAIN_LABELS[t], scoreRes, compFlags });
+                            advancedSolutions.push({ 
+                                activeSlots, 
+                                converts: convList, 
+                                trainIdx: t, 
+                                trainName: TRAIN_LABELS[t], 
+                                scoreRes, 
+                                compFlags 
+                            });
                         }
                     }
                 }
@@ -956,13 +1046,23 @@ function toggleSortOrder() {
     renderAdvancedResults();
 }
 
-// 結果描画（条件分岐ソート：一致は訓練順、不一致はpt昇順、降順トグル対応）
 function renderAdvancedResults() {
     const curScore = parseInt(document.getElementById('sys-cur-score').value) || 0;
     const tarScore = parseInt(document.getElementById('sys-tar-score').value) || 0;
     const gap = tarScore - curScore;
 
-    advancedSolutions.sort((a, b) => {
+    // 重複解を整理
+    let uniqueMap = new Map();
+    advancedSolutions.forEach(sol => {
+        let key = `${sol.trainIdx}_${sol.scoreRes.total}_` + 
+                  sol.activeSlots.map(a => `${a.color[0]}${a.type[0]}`).join('') + `_` +
+                  sol.compFlags.map(f => f?'1':'0').join('') + `_` +
+                  sol.converts.map(c => `${c.color[0]}${c.type[0]}`).sort().join('');
+        if(!uniqueMap.has(key)) uniqueMap.set(key, sol);
+    });
+    let filteredSolutions = Array.from(uniqueMap.values());
+
+    filteredSolutions.sort((a, b) => {
         const aMatch = a.scoreRes.total === gap;
         const bMatch = b.scoreRes.total === gap;
         
@@ -970,11 +1070,14 @@ function renderAdvancedResults() {
         if (!aMatch && bMatch) return sortOrderDesc ? -1 : 1;
         
         if (aMatch && bMatch) {
-            return sortOrderDesc ? b.trainIdx - a.trainIdx : a.trainIdx - b.trainIdx; // 訓練順
+            return sortOrderDesc ? b.trainIdx - a.trainIdx : a.trainIdx - b.trainIdx;
         } else {
-            return sortOrderDesc ? b.scoreRes.total - a.scoreRes.total : a.scoreRes.total - b.scoreRes.total; // pt昇順
+            return sortOrderDesc ? b.scoreRes.total - a.scoreRes.total : a.scoreRes.total - b.scoreRes.total;
         }
     });
+
+    // グローバル退避
+    advancedSolutions = filteredSolutions;
 
     const out = document.getElementById('advanced-results');
     if (advancedSolutions.length === 0) {
@@ -982,8 +1085,8 @@ function renderAdvancedResults() {
         return;
     }
 
-    let html = `<div style="font-weight:bold; margin-bottom:6px;">検出ルート: ${advancedSolutions.length} 件 (クリックで手順展開)</div>`;
-    advancedSolutions.slice(0, 30).forEach((sol, i) => {
+    let html = `<div style="font-weight:bold; margin-bottom:6px;">有効判定ルート: ${advancedSolutions.length} 件 (クリックで詳細展開)</div>`;
+    advancedSolutions.slice(0, 40).forEach((sol, i) => {
         let itemStatusHtml = [];
         for(let s=0; s<3; s++) {
             const item = sol.activeSlots[s];
@@ -998,47 +1101,52 @@ function renderAdvancedResults() {
     out.innerHTML = html;
 }
 
-// 精密フローチャート描画
 function renderFlowchart(idx) {
     const sol = advancedSolutions[idx];
     const target = document.getElementById('flowchart-output');
     
-    let html = `<div class="flow-container"><h4 style="margin:0 0 8px 0; font-size:12px;">【分析ルート ${idx+1} 実行手順】</h4>`;
+    let html = `<div class="flow-container"><h4 style="margin:0 0 8px 0; font-size:12px;">【指図書ルート ${idx+1} の詳細手順】</h4>`;
     let step = 1;
     
-    // 操作1: スロット入れ替え
-    let swapNotes = [];
+    // 手順1: 配置転換
+    let moveNotes = [];
     for(let s=0; s<3; s++) {
-        if(sol.swaps[s] !== null) {
-            const item = sol.activeSlots[s];
-            swapNotes.push(`スロット${s+1}をストックの <span class="text-${item.color}"><strong>${COLOR_JA[item.color]}の${TYPE_JA[item.type]}</strong></span> と入れ替える（既存の引き継ぎ鉱石は消失）`);
+        const item = sol.activeSlots[s];
+        const origLabel = (item.origin === `slot${s+1}`) ? null : 
+                          (item.origin.startsWith('slot') ? `スロット${item.origin.slice(-1)}の既存品` : `ストック枠のアイテム`);
+        if(origLabel) {
+            moveNotes.push(`スロット${s+1}へ、${origLabel}であった <span class="text-${item.color}"><strong>${COLOR_JA[item.color]}の${TYPE_JA[item.type]}</strong></span> をセットする`);
         }
     }
-    if(swapNotes.length > 0) {
-        swapNotes.forEach(n => { html += `<div>${step}. ${n}</div>`; step++; });
+    if(moveNotes.length > 0) {
+        moveNotes.forEach(n => { html += `<div>${step}. ${n}</div>`; step++; });
     } else {
-        html += `<div style="opacity:0.65;">${step}. （スロットの入れ替え操作は不要です）</div>`; step++;
+        html += `<div style="opacity:0.65;">${step}. （各スロットのアイテム配置変更は不要です）</div>`; step++;
     }
 
-    // 操作2: ストックレシピ変換
+    // 手順2: 取り外した余剰枠の鉱石一括分解
     if(sol.converts.length > 0) {
-        let items = sol.converts.map(c => `<span class="text-${c.color}"><strong>${COLOR_JA[c.color]}の${TYPE_JA[c.type]}</strong></span>`).join(', ');
-        html += `<div>${step}. 手持ストック内のレシピ ${items} を鉱石へ一括変換する</div>`; step++;
+        let items = sol.converts.map(c => {
+            let src = c.origin.startsWith('slot') ? `(スロット${c.origin.slice(-1)}の取外品)` : `(ストック)`;
+            return `<span class="text-${c.color}"><strong>${COLOR_JA[c.color]}の${TYPE_JA[c.type]}</strong></span>${src}`;
+        }).join(', ');
+        html += `<div>${step}. 余剰となった ${items} をすべて素材鉱石へ一括変換（分解）する</div>`; step++;
     } else {
-        html += `<div style="opacity:0.65;">${step}. （ストックレシピの変換操作は不要です）</div>`; step++;
+        html += `<div style="opacity:0.65;">${step}. （アイテムの鉱石分解操作は不要です）</div>`; step++;
     }
 
-    // 操作3: 訓練実行
-    html += `<div>${step}. 訓練<strong>「${sol.trainName}」</strong>を実行し、該当領域の鉱石群を完全回収する</div>`; step++;
+    // 手順3: 訓練
+    html += `<div>${step}. 訓練<strong>「${sol.trainName}」</strong>を実行し、出現する鉱石群をすべて回収する</div>`; step++;
 
-    // 結果
+    // 結末 (黒太文字の統一指定)
     let comps = [];
     for(let s=0; s<3; s++) {
         const item = sol.activeSlots[s];
-        if(sol.compFlags[s]) comps.push(`<span class="text-${item.color}"><strong>${COLOR_JA[item.color]}の${TYPE_JA[item.type]}</strong></span>`);
+        if(sol.compFlags[s]) comps.push(`${COLOR_JA[item.color]}の${TYPE_JA[item.type]}`);
     }
-    let resultText = comps.length > 0 ? `${comps.join('、')} が完成。` : "完成したアイテムはありません。";
-    html += `<div style="margin-top:8px; font-weight:bold; color:var(--color-green);">➔ 結果: ${resultText}計 +${sol.scoreRes.total} pts が加算されます。</div></div>`;
+    let resultText = comps.length > 0 ? `${comps.join('、')}が完成。` : "完成したアイテムはありません。";
+    
+    html += `<div class="flow-final-result">➔ 結果: ${resultText} 計 +${sol.scoreRes.total} pts が加算されます。</div></div>`;
     
     target.innerHTML = html;
     target.scrollIntoView({ behavior: 'smooth' });
